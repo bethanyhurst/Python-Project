@@ -8,6 +8,7 @@
 # Copyright:   (c) Bethany 2019
 # Licence:     <your licence>
 #-------------------------------------------------------------------------------
+#https://stackoverflow.com/questions/22899536/hangman-code-python3
 import random
 WORDLIST = ("phone", "laptop", "desktop", "server", "router", "authentication", "cyber", "subnet");
 WORD = random.choice(WORDLIST)
