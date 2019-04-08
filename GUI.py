@@ -10,8 +10,14 @@ def showHub(): #Hub screen to choose a feature of the program
     selected = indexbox("What do you want to do?", choices=choices) #Display the options to the user and get their chosen one
     functions[selected]() #Run the chosen function
 
+def hangmanUpdate(state): #Updates the image
+    userInput = enterbox(msg="Enter a letter.", title="Hangman", image="State" + str(state) + ".png")
+    return(userInput)
+
 def showHangman(): #Launch hangman
     print("Hangman")
+    state = 0 #Holds the current state of the image
+    userInput = hangmanUpdate(state)
 
 def showQuiz(): #Launch the quiz
     print("Quiz")
@@ -85,7 +91,7 @@ def showLogon(): #Launch the login screen
                     else:
                         msgbox("You have run out of login attempts.")
                         break
-            #showHub() #Uncomment to skip login entry
+            showHub() #Uncomment to skip login entry
     else: #If this is the first run
         showAccountCreate() #Get the user to create an account
 
