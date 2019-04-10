@@ -27,7 +27,7 @@ def showHangman(): #Launch hangman
         #Check letter
         if(userInput not in word):
             state += 1
-            usedLetters.append(userInput)
+        usedLetters.append(userInput)
 
     if(win == True):
         endMsg = "You won, want to play again?"
