@@ -2,9 +2,9 @@ import random
 import string
 
 def caesar():
-    number = random.randint(0, 25) #Choose a shift
+    shift = random.randint(0, 25) #Choose a shift
     generateQuestion = random.randint(0, 1) #Choose encode or decode
-    alphabetList = list(string.ascii_uppercase) #Put the alphabet into a list
+    alphabet = list(string.ascii_uppercase) #Put the alphabet into a list
     if generateQuestion == 0: #Encode
         
     else: #Decode
