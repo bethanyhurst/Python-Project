@@ -3,6 +3,7 @@
 
 from easygui import *
 import sys
+import hashlib
 
 def showHub(): #Hub screen to choose a feature of the program
     functions = [showHangman,showQuiz,showLogon] #List of the functions to leaunch the different areas of the program
@@ -10,14 +11,36 @@ def showHub(): #Hub screen to choose a feature of the program
     selected = indexbox("What do you want to do?", choices=choices) #Display the options to the user and get their chosen one
     functions[selected]() #Run the chosen function
 
-def hangmanUpdate(state): #Updates the image
-    userInput = enterbox(msg="Enter a letter.", title="Hangman", image="State" + str(state) + ".png")
+def hangmanUpdate(state, usedLetters): #Updates the image
+    userInput = enterbox(msg="Enter a letter. You have already used:\n" + "".join(usedLetters), title="Hangman", image="State" + str(state) + ".png")
     return(userInput)
 
 def showHangman(): #Launch hangman
     print("Hangman")
     state = 0 #Holds the current state of the image
-    userInput = hangmanUpdate(state)
+    win = False
+    word = "word"#Generate word
+    usedLetters = []
+
+    while(state < 13 and win == False):
+        userInput = hangmanUpdate(state, usedLetters)
+        #Check letter
+        if(userInput not in word):
+            state += 1
+            usedLetters.append(userInput)
+
+    if(win == True):
+        endMsg = "You won, want to play again?"
+    else:
+        endMsg = "You lost, want to try again?"
+
+    choices = ["Yes", "No"]
+    choice = buttonbox(msg=endMsg, choices=choices)
+
+    if(choice == "Yes"):
+        showHangman()
+    else:
+        showHub()
 
 def showQuiz(): #Launch the quiz
     print("Quiz")
@@ -53,8 +76,8 @@ def showAccountCreate(): #Allow the user to create an account
         else: #If the passwords do not match
             errMsg = ("Entered password is not the same!") #Create error message
 
-def logonCheck(loginEntries):
-    returnVal = False
+def logonCheck(loginEntries): #Check login info from user
+    returnVal = False #Correct info or not
     if(loginEntries[1] == "1"):
         returnVal = True
     return(returnVal)
