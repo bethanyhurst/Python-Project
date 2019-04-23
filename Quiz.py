@@ -1,43 +1,52 @@
+##add a function to choose between encrypt or decrypt and generate a word
+
 import string
+import random #####
+
+def checkAnswer(message, codedMessage, decrypt): ####checks all answers
+    score = 0
+    numOfAttempts = 3
+    while numOfAttempts> 0:
+        response = input("type your answer, you have " + str(numOfAttempts) + " attempts left")####
+        if ((decrypt == True and response == message) or (decrypt == False and response == codedMessage)): ####
+            print("Well done!")
+            score += 1
+            break
+        else:
+            print("Incorrect! Try again.")
+            numOfAttempts -= 1
 
 def caesar():
-    number = random.randint(0, 25) #Choose a shift
+    alphabet = string.ascii_lowercase ####
+    alphLen = len(alphabet) ####
+    message = "hello" ####Placeholder for word generated
+    question = "this message, " + message
     shift = random.randint(0, 25) #Choose a shift
-    generateQuestion = random.randint(0, 1) #Choose encode or decode
-    alphabetList = list(string.ascii_uppercase) #Put the alphabet into a list
-    alphabet = list(string.ascii_uppercase) #Put the alphabet into a list
-    if generateQuestion == 0: #Encode
-        queston1 = "encrypt this message using shift 3: LETSPLAYHANGMAN"
-        codedMessage = []
-        for char in message:
-            if char in alphabet:
-                charPos = alphabet.index(char)
-            newCharPos =( charPos + shift) % LEN
-            codedMessage.append(alphabet[newCharPos])
-    numOfAttempts = 3
-    while numOfAttempts> 0:
-        print("type your answer, you have " + str(numOfAttempts) + "attempts left")
+    decrypt = random.choice([True, False]) #Choose encode or decode
 
-        if response == "OHWVSODBKDQJPDQ":
-            print("Well done!")
+    if decrypt == False: #Encode
+        shift = shift
+        question = "Encrypt this message, using the caesar cipher, shift " + str(shift) + ": " +message ####
+    else: ####Decode
+        shift *= -1 ####
+        question = "Decrypt this message, using the caesar cipher, shift " + str(shift) ####
 
-        else:
-            print("Incorrect! Try again.")
-            numOfAttempts -= 1
+    codedMessage = []
 
-    else: #Decode
-        question2 = "Decrypt this message using Caeser Cipher: CROPPSOVNRKVVKW"
-        shift = shift * -1
-    numOfAttempts = 3
-    while numOfAttempts> 0:
-        print("type your answer, you have " + str(numOfAttempts) + "attempts left")
+    for char in message:
+        if char in alphabet:
+            charPos = alphabet.index(char)
+        newCharPos = (charPos + shift) % alphLen
+        codedMessage.append(alphabet[newCharPos])
 
-        if response == "SHEFFIELDHALLAM":
-            print("Well done!")
+    if decrypt == True:
+        question += ": " + "".join(codedMessage)
 
-        else:
-            print("Incorrect! Try again.")
-            numOfAttempts -= 1
+    print(question)
+    print(message) ####Shows answers
+    print("".join(codedMessage)) ####
+
+    checkAnswer(message, "".join(codedMessage), decrypt) ####
 
 def vigenere():
     table = []
@@ -137,6 +146,4 @@ def cipher_decryption(message, mapped_key):
             decrypted_text += chr(65 + itr_count(ord(mapped_key[i]), ord(message[i])))
 
     print("Decrypted Message: {}".format(decrypted_text))
-
-if __name__ == "__main__":
-    main()
+caesar()
