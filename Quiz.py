@@ -118,4 +118,19 @@ def vigenere(): #Vigenere question
         print("Decrypt the following message, using the vigenere cipher with " + key + " as the key: " + codedMessage)
     checkAnswer(message, codedMessage,decrypt)
 
-vigenere()
+def fencepost():
+    fencePostHeight = random.randit(0, 10)
+    decrypt = random.choice([True, False]) #Choose encode or decode
+    msg = "hello".upper()
+    encodedMessage = ""
+    for k in range(fenceHeight):
+        encodedMessage += messageToEncode[k: : fenceHeight]
+
+
+    if decrypt == False: #Encrypt
+        print("Encrypt the following message, using the fence post cipher: " + msg )
+
+    else:
+        print("Decrypt the following message, using the fence post cipher: " + encodedMessage )
+
+fencepost()
