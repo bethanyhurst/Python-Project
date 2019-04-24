@@ -15,6 +15,9 @@ def checkAnswer(message, codedMessage, decrypt): ####checks all answers
         else:
             print("Incorrect! Try again.")
             numOfAttempts -= 1
+    if (numOfAttempts <= 0):
+        print("Too many wrong answers")
+        ####Next question
 
 def caesar():
     alphabet = string.ascii_lowercase ####
@@ -45,105 +48,74 @@ def caesar():
     print(question)
     print(message) ####Shows answers
     print("".join(codedMessage)) ####
-
     checkAnswer(message, "".join(codedMessage), decrypt) ####
 
-def vigenere():
+def vigenereTable(): #Function to fill a list with lists of the alphabet with different shifts
     table = []
-    number = random.randint(0, 25)
-    generateQuestion = (1, 2)
-    if generateQuestion == 1: #Encode question
-        question3 = "Encrypt this message using the Vigenere Cipher: CAMOUFLAGE, key word: HIDDEN"
-        for i in range(25):
-            table.append([])
+    for i in range(25): #Make the table have 26 items
+        table.append([])
 
-    for row in range(25):
-        for column in range(25):
+    for row in range(25): #Foor each letter in the alphabet
+        for column in range(26):
             if (row + 65) + column > 90:
                 # moving back to A after Z
                 # after first row, each letter will shift left by one position compared to row above it
-                table[row].append(chr((row+65) + column - 26))
+                table[row].append(chr((row+65) + column - 26)) #Add the letter to the table
             else:
                 # after first row, each letter will shift left by one position compared to row above it
-                table[row].append(chr((row+65)+column))
-    numOfAttempts = 3
-    while numOfAttempts> 0:
-        print("type your answer, you have " + str(numOfAttempts) + "attempts left")
-
-        if response == "JIPRYSSIJH ":
-            print("Well done!")
-
-        else:
-            print("Incorrect! Try again.")
-            numOfAttempts -= 1
-
-    else:
-        question4 = "Decrypt this message using the Vigenere Cipher: NIPIGNPWKEW key word: GAME"
-
-    numOfAttempts = 3
-    while numOfAttempts> 0:
-        print("type your answer, you have " + str(numOfAttempts) + "attempts left")
-
-        if response == "HIDEANDSEEK":
-            print("Well done!")
-
-        else:
-            print("Incorrect! Try again.")
-            numOfAttempts -= 1
-
+                character = chr((row+65)+column)
+                table[row].append(character) #Add the letter to the table
     return table
 
 
-def cipher_encryption(message, mapped_key):
-    table = create_vigenere_table()
-    encrypted_text = ""
+def vigenereEncryption(message, mappedKey):
+    table = vigenereTable() #Get a table of all the shifted alphabets
+    codedMessage = ""
 
-    for i in range(len(message)):
-        if message[i] == chr(32):
+    for i in range(len(message)): #For each character in the message
+        if message[i] == chr(32): #If the character is a space
             # ignoring space
-            encrypted_text += " "
+            codedMessage += " " #Add a space to the ciphertext
         else:
             # getting element at specific index of table
-            row = ord(message[i])-65
-            column = ord(mapped_key[i]) - 65
-            encrypted_text += table[row][column]
+            row = ord(message[i])-65 #The row in the table of the encoded character
+            column = ord(mappedKey[i]) - 65 #The column in the table
+            codedMessage += table[row][column] #Add the encoded character to the ciphertext
+    print(codedMessage) ####Show answer
+    return(codedMessage)
 
-    print("Encrypted Message: {}".format(encrypted_text))
+def vigenereMessageKey():
+    msg = "hello".upper() ##Placeholder for message generation
+    key = "key".upper() ##Placeholder for key generation
+    # variable to store mapped key
+    keyMap = "" #The key repeated for the same number of characters as the message
+    j=0 #Holds the place of the current key character
 
-
-def itr_count(mapped_key, message):
-    counter = 0
-    result = ""
-
-    # starting alphabets from mapped_key letter and finishing all 26 letters from it, (after z we move to a)
-    for i in range(26):
-        if mapped_key + i > 90:
-            result += chr(mapped_key+(i-26))
+    for i in range(len(msg)): #Counts through each letter in the message
+        if ord(msg[i]) == 32: #ord() gets the unicode code for the character
+            #If the current letter is a space
+            keyMap += " " #A space lined up with each space in the message
         else:
-            result += chr(mapped_key+i)
+            if j < len(key): #Count through the letters in the key
+                keyMap += key[j] #Add the character to the key map
+                j += 1 #Move to next letter
+            else:
+                j = 0 #Go back to the start of the key
+                keyMap += key[j] #Add the character to the key map
+                j += 1 #Move to next letter
 
-    # counting the number of iterations it take from mapped key letter to ciphertext letter
-    for i in range(len(result)):
-        if result[i] == chr(message):
-            break
-        else:
-            counter += 1
+    #print(keyMap)
+    return msg, keyMap, key #Return the obtained values
 
-    return counter
+def vigenere(): #Vigenere question
+    decrypt = random.choice([True, False]) #Choose encode or decode
+    message, mappedKey, key = vigenereMessageKey() #Get the message and the key
+    codedMessage = vigenereEncryption(message, mappedKey) #Encrypt the message
+    if decrypt == False: #Encrypt
+        print("Encrypt the following message, using the vigenere cipher with " + key + " as the key: " + message)
 
+    else: #Decrypt
+        print("Decrypt the following message, using the vigenere cipher with " + key + " as the key: " + codedMessage)
+    checkAnswer(message, codedMessage,decrypt)
 
-def cipher_decryption(message, mapped_key):
-    table = create_vigenere_table()
-    decrypted_text = ""
-
-    for i in range(len(message)):
-        if message[i] == chr(32):
-            # ignoring space
-            decrypted_text += " "
-        else:
-            # adding number of iterations, it takes to reach from mapped key letter to cipher letter in 65
-            # by doing so we get column header of ciphertext letter, which happens to be decrypted letter
-            decrypted_text += chr(65 + itr_count(ord(mapped_key[i]), ord(message[i])))
-
-    print("Decrypted Message: {}".format(decrypted_text))
-caesar()
+vigenere()
